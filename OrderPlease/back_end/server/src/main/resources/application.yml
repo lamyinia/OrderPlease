@@ -1,0 +1,27 @@
+server:
+  8081
+
+spring:
+  datasource:
+    username: root
+    password: "@Ly135790"
+    url: jdbc:mysql://localhost:3306/film_comment_db?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  level:
+    org.com:
+      mapper: debug
+      service: info
+      controller: info
+
+order-please:
