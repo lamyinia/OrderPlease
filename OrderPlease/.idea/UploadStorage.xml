@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="UploadStorage">
+    <option name="envList">
+      <list>
+        <EnvDTO>
+          <option name="env" value="localhost:8081" />
+          <option name="urlMap">
+            <map>
+              <entry key="server" value="localhost:8081" />
+            </map>
+          </option>
+        </EnvDTO>
+      </list>
+    </option>
+  </component>
+</project>

@@ -1,0 +1,59 @@
+package org.com.interceptor;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+import org.com.constant.JwtClaimsConstant;
+import org.com.properties.JwtProperties;
+import org.com.utils.JwtUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.HandlerInterceptor;
+
+import java.io.IOException;
+
+@Slf4j
+@Component
+public class JwtTokenAdminInterceptor implements HandlerInterceptor {
+    @Autowired
+    public JwtProperties jwtProperties;
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+        if (!(handler instanceof HandlerMethod)){
+            return true;
+        }
+        String token = request.getHeader(jwtProperties.getAdminTokenName());
+        if (token == null || token.isBlank()){
+            response.setStatus(401);
+            response.getWriter().write("Missing authorization token");
+            return false;
+        }
+        try {
+            log.trace("JWT验证 - 令牌: {}...", token.substring(0, Math.min(token.length(), 6)));
+            Claims claims = JwtUtils.parseJWT(jwtProperties.getAdminSecretKey(), token);
+
+            Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
+            log.info("当前员工ID: {}", empId);
+            request.setAttribute("currentId", empId);
+
+            return true;
+        } catch (ExpiredJwtException ex){
+            log.warn("JWT已过期: {}", ex.getMessage());
+            response.setStatus(401);
+            response.getWriter().write("Token expired");
+
+            return false;
+        } catch (JwtException | IllegalArgumentException ex){
+            log.warn("无效JWT: {}", ex.getMessage());
+            response.setStatus(401);
+            response.getWriter().write("Invalid token");
+
+            return false;
+        }
+    }
+}

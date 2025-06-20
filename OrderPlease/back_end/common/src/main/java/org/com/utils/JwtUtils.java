@@ -38,8 +38,8 @@ public class JwtUtils {
     /**
      * Token解密
      *
-     * @param secretKey jwt秘钥 此秘钥一定要保留好在服务端, 不能暴露出去, 否则sign就可以被伪造, 如果对接多个客户端建议改造成多个
-     * @param token     加密后的token
+     * @param secretKey jwt 秘钥 此秘钥一定要保留好在服务端, 不能暴露出去, 否则 sign 就可以被伪造, 如果对接多个客户端建议改造成多个
+     * @param token     加密后的 token
      * @return
      */
     public static Claims parseJWT(String secretKey, String token){
