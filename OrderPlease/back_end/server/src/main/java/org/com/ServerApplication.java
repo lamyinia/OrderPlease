@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @Slf4j
 public class ServerApplication {
     public static void main(String[] args) {
-        log.info("spring server 启动成功");
         SpringApplication.run(ServerApplication.class, args);
+        log.info("spring server 启动成功");
     }
 }
