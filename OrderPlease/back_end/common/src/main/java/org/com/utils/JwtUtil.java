@@ -5,14 +5,13 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureAlgorithm;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Map;
 
-public class JwtUtils {
+public class JwtUtil {
     /**
      * 生成jwt
      * 使用Hs256算法, 私匙使用固定秘钥

@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.com.constant.JwtClaimsConstant;
 import org.com.properties.JwtProperties;
-import org.com.utils.JwtUtils;
+import org.com.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -24,6 +24,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
+
         if (!(handler instanceof HandlerMethod)){
             return true;
         }
@@ -35,7 +36,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         }
         try {
             log.trace("JWT验证 - 令牌: {}...", token.substring(0, Math.min(token.length(), 6)));
-            Claims claims = JwtUtils.parseJWT(jwtProperties.getAdminSecretKey(), token);
+            Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
 
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
             log.info("当前员工ID: {}", empId);

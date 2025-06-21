@@ -2,10 +2,7 @@ package org.com.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
 
@@ -13,6 +10,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @ApiModel(description = "员工登录返回的数据格式")
 public class EmployeeLoginVO implements Serializable {
     @ApiModelProperty("主键值")

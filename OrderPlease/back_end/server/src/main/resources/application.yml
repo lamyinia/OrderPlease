@@ -26,6 +26,6 @@ logging:
 
 order-please:
   jwt:
-    admin-secret-key: itcast
+    admin-secret-key: rHQgVzX6w+EZnCx7c8a2jP9GqM1S5d3yV0bW4fRwUk/e7p0tAoLXiNlKvBh=
     admin-ttl: 7200000
     admin-token-name: token
