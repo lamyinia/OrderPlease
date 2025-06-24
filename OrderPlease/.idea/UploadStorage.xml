@@ -4,10 +4,10 @@
     <option name="envList">
       <list>
         <EnvDTO>
-          <option name="env" value="localhost:8081" />
+          <option name="env" value="server-port" />
           <option name="urlMap">
             <map>
-              <entry key="server" value="localhost:8081" />
+              <entry key="server" value="http://localhost:8081" />
             </map>
           </option>
         </EnvDTO>

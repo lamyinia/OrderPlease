@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -36,24 +35,17 @@ public class JacksonObjectMapper extends ObjectMapper {
     public JacksonObjectMapper() {
         super();
 
-        // 设置基础配置
         this.setDefaultConfiguration();
-
-        // 注册Java 8时间模块
         this.registerJava8TimeModule();
 
         // 注册自定义序列化/反序列化
         this.registerCustomSerialization();
 
-        // 配置序列化特性
         this.configureSerializationFeatures();
-
-        // 配置反序列化特性
         this.configureDeserializationFeatures();
     }
 
     private void setDefaultConfiguration() {
-        // 设置时区
         this.setTimeZone(TimeZone.getTimeZone("Asia/Shanghai"));
 
         // 设置日期格式
@@ -62,10 +54,8 @@ public class JacksonObjectMapper extends ObjectMapper {
         // 设置序列化时包含属性的规则
         this.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-        // 允许单引号
         this.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
 
-        // 允许不带引号的字段名
         this.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
 
         // 允许JSON包含控制字符
@@ -165,13 +155,21 @@ public class JacksonObjectMapper extends ObjectMapper {
         return new JacksonObjectMapper();
     }
 
-    // 提供自定义日期格式的方法
+    /**
+     * @param dateFormat
+     * @return {@link JacksonObjectMapper }
+     * 提供自定义日期格式的方法
+     */
     public JacksonObjectMapper withDateFormat(String dateFormat) {
         this.setDateFormat(new SimpleDateFormat(dateFormat));
         return this;
     }
 
-    // 提供自定义时区的方法
+    /**
+     * @param timeZone
+     * @return {@link JacksonObjectMapper }
+     * 提供自定义时区的方法
+     */
     public JacksonObjectMapper withTimeZone(TimeZone timeZone) {
         this.setTimeZone(timeZone);
         return this;

@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.com.constant.JwtClaimsConstant;
+import org.com.context.BaseContext;
 import org.com.properties.JwtProperties;
 import org.com.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,13 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             return false;
         }
         try {
-            log.trace("JWT验证 - 令牌: {}...", token.substring(0, Math.min(token.length(), 6)));
+            log.info("JWT验证 - 令牌: {}...", token.substring(0, Math.min(token.length(), 6)));
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
 
             Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
             log.info("当前员工ID: {}", empId);
             request.setAttribute("currentId", empId);
+            BaseContext.setCurrentId(empId);
 
             return true;
         } catch (ExpiredJwtException ex){
