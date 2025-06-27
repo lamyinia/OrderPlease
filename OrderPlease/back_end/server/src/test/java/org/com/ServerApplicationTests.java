@@ -1,8 +1,11 @@
 package org.com;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.com.entity.Category;
 import org.com.entity.Employee;
 import org.com.mapper.EmployeeMapper;
+import org.com.service.CategoryService;
 import org.com.service.EmployeeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,19 +20,14 @@ class ServerApplicationTests {
     EmployeeMapper employeeMapper;
     @Autowired
     EmployeeService employeeService;
+    @Autowired
+    CategoryService categoryService;
+
 
     @Test
-    void insertTest() {
-        for (int i = 6; i <= 6; ++ i){
-            employeeService.save(new Employee().builder()
-                    .username("admin_by_" + String.valueOf(i))
-                    .password("123456")
-                    .name("小王")
-                    .phone("13202010201")
-                    .sex("0")
-                    .identityCard("440101199001010047")
-                    .build());
-        }
+    void TestRemove() {
+        LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<Category>()
+                .eq(Category::getName, "鼠标");
     }
 
     @Test
@@ -47,10 +45,6 @@ class ServerApplicationTests {
 
     @Test
     void test(){
-        Class<EmployeeService> aClass = EmployeeService.class;
-        Method[] declaredMethods = aClass.getDeclaredMethods();
-        for (Method declaredMethod : declaredMethods) {
-            System.out.printf("%s %s\n", declaredMethod.getName(), declaredMethod.getAnnotations());
-        }
+        System.out.println(System.currentTimeMillis());
     }
 }

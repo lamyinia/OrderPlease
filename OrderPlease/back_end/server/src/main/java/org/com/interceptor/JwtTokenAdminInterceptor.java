@@ -35,6 +35,7 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
             response.getWriter().write("Missing authorization token");
             return false;
         }
+
         try {
             log.info("JWT验证 - 令牌: {}...", token.substring(0, Math.min(token.length(), 6)));
             Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);

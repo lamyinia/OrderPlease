@@ -1,4 +1,4 @@
-package org.com.controller;
+package org.com.controller.admin;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,14 +43,18 @@ public class EmployeeController {
 
         Map<String, Object> claims = new HashMap<>();
         claims.put(JwtClaimsConstant.EMP_ID, employee.getId());
-        String token = JwtUtil.createJwt(jwtProperties.getAdminSecretKey(),
-                jwtProperties.getAdminTtl(), claims);
 
-        EmployeeLoginVO employeeLoginVO = EmployeeLoginVO.builder().id(employee.getId())
+        String token = JwtUtil
+                .createJwt(jwtProperties.getAdminSecretKey(), jwtProperties.getAdminTtl(), claims);
+
+        EmployeeLoginVO employeeLoginVO = EmployeeLoginVO
+                .builder()
+                .id(employee.getId())
                 .userName(employee.getUsername())
                 .name(employee.getName())
                 .token(token)
                 .build();
+
         return Result.success(employeeLoginVO);
     }
 
