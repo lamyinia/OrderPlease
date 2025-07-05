@@ -39,7 +39,7 @@
         <knife4j-spring-boot-starter>3.0.3</knife4j-spring-boot-starter>
         <spring-aop>6.2.0</spring-aop>
         <aliyun-sdk-oss>3.18.1</aliyun-sdk-oss>
-        <pagehelper>6.1.0</pagehelper>
+        <pagehelper>2.1.0</pagehelper>
     </properties>
 
     <dependencyManagement>
@@ -114,7 +114,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper</artifactId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version> ${pagehelper} </version>
             </dependency>
         </dependencies>

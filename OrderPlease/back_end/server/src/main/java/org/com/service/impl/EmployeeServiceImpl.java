@@ -1,8 +1,9 @@
 package org.com.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.com.annotation.AutoFillSetter;
 import org.com.constant.MessageConstant;
 import org.com.constant.PasswordConstant;
@@ -17,15 +18,17 @@ import org.com.exception.AccountNotFoundException;
 import org.com.exception.PasswordErrorException;
 import org.com.mapper.EmployeeMapper;
 import org.com.result.PageResult;
-import org.com.result.Result;
 import org.com.service.EmployeeService;
 import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
 @Service
 public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> implements EmployeeService {
+    @Autowired
+    EmployeeMapper employeeMapper;
 
     @Override
     public Employee login(EmployeeLoginDTO employeeLoginDTO) {
@@ -68,8 +71,10 @@ public class EmployeeServiceImpl extends ServiceImpl<EmployeeMapper, Employee> i
     }
 
     @Override
-    public Result<PageResult> selectPage(EmployeePageQueryDTO employeePageQueryDTO) {
-        Page<Employee> page = this.page(new Page<>(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize()));
-        return Result.success(new PageResult(page.getTotal(), page.getRecords()));
+    public PageResult pageQuery(EmployeePageQueryDTO employeePageQueryDTO) {
+        PageHelper.startPage(employeePageQueryDTO.getPage(), employeePageQueryDTO.getPageSize());
+
+        Page<Employee> page = employeeMapper.pageQuery(employeePageQueryDTO);
+        return new PageResult(page.getTotal(), page.getResult());
     }
 }

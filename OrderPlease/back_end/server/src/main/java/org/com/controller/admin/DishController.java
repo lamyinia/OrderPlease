@@ -27,7 +27,8 @@ public class DishController {
     @GetMapping("/page")
     @ApiOperation("普通分页")
     public Result<PageResult> selectPage(DishPageQueryDTO dishPageQueryDTO){
-        return dishService.selectPage(dishPageQueryDTO);
+        PageResult result = dishService.pageQuery(dishPageQueryDTO);
+        return Result.success(result);
     }
 
     @PostMapping()

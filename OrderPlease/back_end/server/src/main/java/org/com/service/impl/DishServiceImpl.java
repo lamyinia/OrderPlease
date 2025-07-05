@@ -31,11 +31,11 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
     DishFlavorMapper dishFlavorMapper;
 
     @Override
-    public Result<PageResult> selectPage(DishPageQueryDTO dishPageQueryDTO) {
+    public PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO) {
         PageHelper.startPage(dishPageQueryDTO.getPage(), dishPageQueryDTO.getPageSize());
         Page<DishVO> page = dishMapper.pageQuery(dishPageQueryDTO);
 
-        return Result.success(new PageResult(page.getResult().size(), page.getResult()));
+        return new PageResult(page.getTotal(), page.getResult());
     }
 
     @Override

@@ -74,7 +74,8 @@ public class EmployeeController {
     @ApiOperation("分页查询")
     @GetMapping("/page")
     public Result<PageResult> selectPage(EmployeePageQueryDTO employeePageQueryDTO){
-        return employeeService.selectPage(employeePageQueryDTO);
+        PageResult result = employeeService.pageQuery(employeePageQueryDTO);
+        return Result.success(result);
     }
 
     // TODO 启用禁用

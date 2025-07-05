@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface DishService extends IService<Dish> {
-    Result<PageResult> selectPage(DishPageQueryDTO dishPageQueryDTO);
+    PageResult pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
     void addDish(DishDTO dishDTO);
 

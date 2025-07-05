@@ -30,7 +30,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         PageHelper.startPage(categoryPageQueryDTO.getPage(), categoryPageQueryDTO.getPageSize());
         Page<Category> result = categoryMapper.pageQuery(categoryPageQueryDTO);
 
-        return new PageResult(result.getResult().size(), result.getResult());
+        return new PageResult(result.getTotal(), result.getResult());
     }
 
     @Override
