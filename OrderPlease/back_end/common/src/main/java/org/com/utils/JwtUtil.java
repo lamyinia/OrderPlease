@@ -45,13 +45,11 @@ public class JwtUtil {
      */
     public static Claims parseJWT(String secretKey, String token){
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-//        JwtParser jwtParser = Jwts.parser().verifyWith(key).build();
 
         return Jwts.parser()
                 .verifyWith(key)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-//        return jwtParser.parseSignedClaims(token).getPayload();
     }
 }

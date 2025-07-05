@@ -19,7 +19,7 @@ import java.lang.reflect.Method;
 @Component
 public class AutoFillSetterAspect {
 
-    @Pointcut("execution(* org.com.service.impl..*(..)) && @annotation(org.com.annotation.AutoFillSetter)")
+    @Pointcut( "( execution(* org.com.service.impl..*(..)) || execution(* org.com.mapper.*.*(..)) ) && @annotation(org.com.annotation.AutoFillSetter)" )
     public void fillSetter() {}
 
     @Before("fillSetter()")

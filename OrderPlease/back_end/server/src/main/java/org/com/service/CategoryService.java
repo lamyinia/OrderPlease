@@ -8,11 +8,15 @@ import org.com.result.PageResult;
 import org.com.result.Result;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface CategoryService extends IService<Category> {
-    Result<PageResult> selectPage(CategoryPageQueryDTO categoryPageQueryDTO);
+    PageResult selectPage(CategoryPageQueryDTO categoryPageQueryDTO);
 
     void addCategory(CategoryDTO categoryDTO);
     void addCategory(Category category);
     void updateCategory(CategoryDTO categoryDTO);
+    void turnState(Integer status, Long id);
+    List<Category> selectByType(Integer type);
 }

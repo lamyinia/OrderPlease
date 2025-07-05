@@ -2,11 +2,14 @@ server:
   port: 8081
 
 spring:
+  profiles:
+    active: dev
+
   datasource:
-    username: root
-    password: "@Ly135790"
-    url: jdbc:mysql://localhost:3306/order_please?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${value.datasource.username}
+    password: ${value.datasource.password}
+    url: jdbc:mysql://${value.datasource.host}:${value.datasource.port}/${value.datasource.database}?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
+    driver-class-name: ${value.datasource.driver-class-name}
   servlet:
     multipart:
       max-file-size: 100MB
@@ -17,6 +20,8 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations:
+    classpath: classpath:mapper/*.xml
 
 logging:
   level:
@@ -27,6 +32,13 @@ logging:
 
 order-please:
   jwt:
-    admin-secret-key: rHQgVzX6w+EZnCx7c8a2jP9GqM1S5d3yV0bW4fRwUk/e7p0tAoLXiNlKvBh=
-    admin-ttl: 7200000
-    admin-token-name: token
+    admin-secret-key: ${value.jwt.admin-secret-key}
+    admin-ttl: ${value.jwt.admin-ttl}
+    admin-token-name: ${value.jwt.admin-token-name}
+
+  aliyun-oss:
+    endpoint: ${value.aliyun-oss.endpoint}
+    access-key-id: ${value.aliyun-oss.access-key-id}
+    access-key-secret: ${value.aliyun-oss.access-key-secret}
+    bucket-name: ${value.aliyun-oss.bucket-name}
+

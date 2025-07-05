@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class CategoryPageQueryDTO {
     //  页码
-    private int pageNum;
+    private int page;
 
     //  每页记录数
     private int pageSize;
