@@ -14,6 +14,7 @@ public class OssConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AliYunOssUtil aliYunOssUtil(AliYunProperties aliYunProperties){
+        log.info("配置阿里云 oss 存储...");
         return new AliYunOssUtil(aliYunProperties.getEndpoint(),
                 aliYunProperties.getAccessKeyId(),
                 aliYunProperties.getAccessKeySecret(),

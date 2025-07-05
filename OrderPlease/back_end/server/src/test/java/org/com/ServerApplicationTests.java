@@ -2,8 +2,11 @@ package org.com;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.com.entity.Category;
 import org.com.entity.Employee;
+import org.com.entity.User;
 import org.com.mapper.EmployeeMapper;
 import org.com.service.CategoryService;
 import org.com.service.EmployeeService;
@@ -12,12 +15,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,26 +34,19 @@ class ServerApplicationTests {
     CategoryService categoryService;
     @Autowired
     AliYunOssUtil aliYunOssUtil;
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    @Data
+    @AllArgsConstructor
+    class One implements Serializable {
+        Integer number;
+        String str;
+    }
 
     @Test
-    void testUpload(){
-        for (int i = 2; i <= 27; ++ i){
-            String filePath = "D:\\git-clone\\黑马Java项目-苍穹外卖\\资料\\资料\\day03\\图片资源\\" + String.valueOf(i) + ".png";
-            Path path = Path.of(filePath);
-            if(!Files.exists(path)){
-                System.err.println("文件不存在: " + path.toAbsolutePath());
-                // 或者抛出断言错误，让测试失败
-                Assertions.fail("文件不存在: " + filePath);
-                return;
-            }
-
-            try {
-                byte[] bytes = Files.readAllBytes(Path.of(filePath));
-                aliYunOssUtil.upload(bytes, "order-please/imgs/"  + String.valueOf(i) + ".png");
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
+    void testRedis(){
+        redisTemplate.opsForValue().set("key_one", new One(99, "one"));
     }
 
     @Test

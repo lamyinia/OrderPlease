@@ -12,9 +12,11 @@ import org.com.result.Result;
 import org.com.service.DishService;
 import org.com.vo.DishVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @Api(tags = "菜品相关接口")
 @Slf4j
@@ -23,11 +25,23 @@ import java.util.List;
 public class DishController {
     @Autowired
     private DishService dishService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @GetMapping("/page")
     @ApiOperation("普通分页")
     public Result<PageResult> selectPage(DishPageQueryDTO dishPageQueryDTO){
+        String key = "admin_page_" + String.valueOf(dishPageQueryDTO.getPage()) + "_" + String.valueOf(dishPageQueryDTO.getPageSize());
+
+        PageResult cache = (PageResult)redisTemplate.opsForValue().get(key);
+
+        if (cache != null){
+            return Result.success(cache);
+        }
+
         PageResult result = dishService.pageQuery(dishPageQueryDTO);
+        redisTemplate.opsForValue().set(key, (PageResult) result);
+
         return Result.success(result);
     }
 
@@ -53,5 +67,10 @@ public class DishController {
         log.info("根据id查询菜品：{}", id);
         DishVO dishVO = dishService.getByIdWithFlavor(id);
         return Result.success(dishVO);
+    }
+
+    private void cleanCache(String pattern){
+        Set keys = redisTemplate.keys(pattern);
+        redisTemplate.delete(keys);
     }
 }

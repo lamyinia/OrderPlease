@@ -10,10 +10,18 @@ spring:
     password: ${value.datasource.password}
     url: jdbc:mysql://${value.datasource.host}:${value.datasource.port}/${value.datasource.database}?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&serverTimezone=GMT%2b8&allowPublicKeyRetrieval=true
     driver-class-name: ${value.datasource.driver-class-name}
+  data:
+    redis:
+      host: ${value.redis.host}
+      database: ${value.redis.database}
+      port: ${value.redis.port}
+      password: ${value.redis.password}
+
   servlet:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+
 
 
 mybatis-plus:
