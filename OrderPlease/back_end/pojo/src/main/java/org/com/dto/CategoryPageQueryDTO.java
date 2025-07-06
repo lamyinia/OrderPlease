@@ -2,8 +2,10 @@ package org.com.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class CategoryPageQueryDTO {
+public class CategoryPageQueryDTO implements Serializable {
     //  页码
     private int page;
 

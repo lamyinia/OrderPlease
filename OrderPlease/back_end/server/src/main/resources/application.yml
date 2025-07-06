@@ -50,3 +50,7 @@ order-please:
     access-key-secret: ${value.aliyun-oss.access-key-secret}
     bucket-name: ${value.aliyun-oss.bucket-name}
 
+  wechat:
+    appid:
+
+
