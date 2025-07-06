@@ -12,9 +12,10 @@
     "lib": ["esnext", "dom"],
     "baseUrl": ".",
     "allowJs": true,  //编译JS
-    /*  "paths": {
-        "@*//*": ["src*//*"]
-    },*/
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
     "types": ["vite/client", "unplugin-icons/types/vue", "element-plus/global"],
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "allowSyntheticDefaultImports": true /* 允许默认导入 */,
@@ -23,6 +24,7 @@
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment"
   },
+
   "include": [
     "src/**/*.ts",
     "src/**/*.vue",
@@ -32,8 +34,10 @@
     "vite.config.ts",
     "types/**/*.ts"
   ],
+
   "ts-node": {
     "esm": true
   },
+
   "exclude": ["node_modules", "dist", "**/*.js"]
 }
