@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.UUID;
 
-@Api(tags = "通用接口")
+@Api(tags = "通用接口(图片上传)")
 @Slf4j
 @RestController
 @RequestMapping("/admin/common")

@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@Api("员工信息")
+@Api(tags = "员工管理相关")
 @Slf4j
 @RestController
 @RequestMapping("/admin/employee")

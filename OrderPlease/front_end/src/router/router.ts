@@ -10,6 +10,16 @@ const routes: Array<RouteRecordRaw> = [
         path: "/login",
         name: "登录",
         component: () => import('@/views/login/Login.vue')
+    },
+    {
+        path: "/dashboard",
+        name: "桌面",
+        component: () => import('@/views/dashbord/DashBoard.vue')
+    },
+    {
+        path: "/404",
+        name: "发生错误",
+        component: () => import('@/views/Static404.vue')
     }
 ]
 

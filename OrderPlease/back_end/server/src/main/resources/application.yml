@@ -43,6 +43,9 @@ order-please:
     admin-secret-key: ${value.jwt.admin-secret-key}
     admin-ttl: ${value.jwt.admin-ttl}
     admin-token-name: ${value.jwt.admin-token-name}
+    user-secret-key: ${value.jwt.user-secret-key}
+    user-ttl: ${value.jwt.user-ttl}
+    user-token-name: ${value.jwt.user-token-name}
 
   aliyun-oss:
     endpoint: ${value.aliyun-oss.endpoint}
@@ -51,6 +54,6 @@ order-please:
     bucket-name: ${value.aliyun-oss.bucket-name}
 
   wechat:
-    appid:
-
+    appid: ${value.wechat.appid}
+    app-secret: ${value.wechat.app-secret}
 

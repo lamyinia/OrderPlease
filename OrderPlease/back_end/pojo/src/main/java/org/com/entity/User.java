@@ -20,7 +20,7 @@ public class User implements Serializable {
 
     private Long id;
 
-    private String openid;
+    private String openId;
 
     private String name;
 
@@ -28,7 +28,7 @@ public class User implements Serializable {
 
     private String sex;
 
-    private String idNumber;
+    private String identityCard;
 
     private String avatar;
 

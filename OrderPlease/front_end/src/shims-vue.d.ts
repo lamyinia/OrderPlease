@@ -1,5 +1,9 @@
-// src/shims-js-cookie.d.ts
+
 declare module 'js-cookie' {
+    /**
+     * 解决 js-cookie 假报错，优化开发体验
+     *
+     */
     interface CookieAttributes {
         /**
          * 定义 cookie 的有效期

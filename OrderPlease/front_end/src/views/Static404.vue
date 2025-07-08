@@ -1,6 +1,6 @@
 <template>
-  <div class="wscn-http404-container">
-    <div class="wscn-http404">
+  <div class="http404-container">
+    <div class="http404">
       <div class="pic-404">
         <img
           class="pic-404__parent"
@@ -27,14 +27,6 @@
         <div class="text-404__oops">
           OOPS!
         </div>
-        <div class="text-404__info">
-          All rights reserved
-          <a
-            style="color:#20a0ff"
-            href="https://wallstreetcn.com"
-            target="_blank"
-          >wallstreetcn</a>
-        </div>
         <div class="text-404__headline">
           {{ message }}
         </div>
@@ -42,7 +34,7 @@
           Please check that the URL you entered is correct, or click the button below to return to the homepage.
         </div>
         <a
-          href=""
+          href="/"
           class="text-404__return-home"
         >Back to home</a>
       </div>
@@ -50,28 +42,21 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script setup lang="ts">
 
-export default defineComponent( {
-  name: "NotFound",
-  data() {
-    return {
-      message: '404 Page Not Found',
-    }
-  }
-})
+const message = '404 Page Not Found'
+
 </script>
 
 <style lang="scss" scoped>
-.wscn-http404-container {
+.http404-container {
   transform: translate(-50%,-50%);
   position: absolute;
   top: 40%;
   left: 50%;
 }
 
-.wscn-http404 {
+.http404 {
   position: relative;
   width: 1200px;
   padding: 0 50px;
@@ -96,7 +81,7 @@ export default defineComponent( {
         left: 220px;
         opacity: 0;
         animation-name: cloudLeft;
-        animation-duration: 2s;
+        animation-duration: 10s;
         animation-timing-function: linear;
         animation-fill-mode: forwards;
         animation-delay: 1s;

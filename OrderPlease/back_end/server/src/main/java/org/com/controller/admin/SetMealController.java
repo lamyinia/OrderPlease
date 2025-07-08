@@ -11,7 +11,7 @@ import org.com.service.SetMealService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@Api("套餐相关接口")
+@Api(tags = "套餐相关接口")
 @Slf4j
 @RestController
 @RequestMapping("/admin/setmeal")
