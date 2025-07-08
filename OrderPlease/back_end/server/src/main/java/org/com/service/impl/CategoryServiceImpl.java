@@ -70,7 +70,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
     @Override
     public List<Category> selectByType(Integer type) {
-        return this.list(new LambdaQueryWrapper<Category>()
-                .eq(Category::getType, type));
+        return categoryMapper.list(type);
     }
 }

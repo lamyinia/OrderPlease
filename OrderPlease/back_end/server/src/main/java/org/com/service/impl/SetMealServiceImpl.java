@@ -51,4 +51,9 @@ public class SetMealServiceImpl implements SetMealService {
         List<SetMealVO> result = setMealMapper.pageQuery(setMealPageQueryDTO).getResult();
         return new PageResult(result.size(), result);
     }
+
+    @Override
+    public List<SetMeal> filter(SetMeal build) {
+        return setMealMapper.filter(build);
+    }
 }

@@ -19,9 +19,9 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class JwtTokenAdminInterceptor implements HandlerInterceptor {
+public class JwtTokenUserInterceptor implements HandlerInterceptor {
     @Autowired
-    public JwtProperties jwtProperties;
+    JwtProperties jwtProperties;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {
@@ -29,7 +29,8 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
         if (!(handler instanceof HandlerMethod)){
             return true;
         }
-        String token = request.getHeader(jwtProperties.getAdminTokenName());
+
+        String token = request.getHeader(jwtProperties.getUserTokenName());
         if (token == null || token.isBlank()){
             response.setStatus(401);
             response.getWriter().write("Missing authorization token");
@@ -38,13 +39,13 @@ public class JwtTokenAdminInterceptor implements HandlerInterceptor {
 
         try {
             log.info("JWT验证 - 令牌: {}...", token.substring(0, Math.min(token.length(), 6)));
-            Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
+            Claims claims = JwtUtil.parseJWT(jwtProperties.getUserSecretKey(), token);
 
-            Long empId = Long.valueOf(claims.get(JwtClaimsConstant.EMP_ID).toString());
-            log.info("当前员工ID: {}", empId);
-            request.setAttribute("currentId", empId);
+            Long userId = Long.valueOf(claims.get(JwtClaimsConstant.USER_ID).toString());
+            log.info("当前用户ID: {}", userId);
+            request.setAttribute("currentId", userId);
 
-            BaseContext.setCurrentId(empId);
+            BaseContext.setCurrentId(userId);
 
             return true;
         } catch (ExpiredJwtException ex){

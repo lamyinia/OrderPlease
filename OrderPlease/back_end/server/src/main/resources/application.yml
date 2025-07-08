@@ -32,6 +32,8 @@ mybatis-plus:
     classpath: classpath:mapper/*.xml
 
 logging:
+  file:
+    name: ./back_end/server/logs/record.log
   level:
     org.com:
       mapper: debug

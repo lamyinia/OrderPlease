@@ -2,6 +2,7 @@ package org.com.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.com.interceptor.JwtTokenAdminInterceptor;
+import org.com.interceptor.JwtTokenUserInterceptor;
 import org.com.json.JacksonObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,8 @@ import java.util.List;
 public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     @Autowired
     private JwtTokenAdminInterceptor jwtTokenAdminInterceptor;
+    @Autowired
+    private JwtTokenUserInterceptor jwtTokenUserInterceptor;
 
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
@@ -24,6 +27,11 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
         registry.addInterceptor(jwtTokenAdminInterceptor)
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/admin/employee/login");
+
+        registry.addInterceptor(jwtTokenUserInterceptor)
+                .addPathPatterns("/user/**")
+                .excludePathPatterns("/user/user/login")
+                .excludePathPatterns("/user/shop/status");
     }
     /**
      * 扩展Spring MVC框架的消息转化器

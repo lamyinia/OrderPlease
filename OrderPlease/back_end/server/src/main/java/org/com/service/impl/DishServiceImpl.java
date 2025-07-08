@@ -11,7 +11,6 @@ import org.com.entity.DishFlavor;
 import org.com.mapper.DishFlavorMapper;
 import org.com.mapper.DishMapper;
 import org.com.result.PageResult;
-import org.com.result.Result;
 import org.com.service.DishService;
 import org.com.vo.DishVO;
 import org.springframework.beans.BeanUtils;
@@ -19,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -63,6 +63,23 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
         BeanUtils.copyProperties(dish, dishVO);
         dishVO.setFlavors(dishFlavors);
 
+
         return dishVO;
+    }
+
+    @Override
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> dishList = dishMapper.filter(dish);
+
+        List<DishVO> dishVOList = new ArrayList<>();
+        for (Dish one : dishList) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(one, dishVO);
+
+            dishVO.setFlavors(dishFlavorMapper.getByDishId(one.getId()));
+            dishVOList.add(dishVO);
+        }
+
+        return dishVOList;
     }
 }

@@ -1,4 +1,31 @@
 package org.com.controller.admin;
 
+import lombok.extern.slf4j.Slf4j;
+import org.com.result.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.bind.annotation.*;
+
+@Slf4j
+@RestController("adminShopController")
+@RequestMapping("/admin/shop")
 public class ShopController {
+    @Autowired
+    RedisTemplate redisTemplate;
+
+    public static final String KEY = "SHOP_STATUS";
+
+    @PutMapping("/{status}")
+    public Result metaStatus(@PathVariable Integer status){
+        log.info("当前营业状态：{}", status == 1 ? "营业中" : "暂停营业");
+        redisTemplate.opsForValue().set(KEY, status);
+        return Result.success();
+    }
+
+    @GetMapping("/status")
+    public Result<Integer> getStatus(){
+        Integer status = (Integer) redisTemplate.opsForValue().get(KEY);
+        log.info("获取到营业状态：{}", status == 1 ? "营业中" : "暂停营业");
+        return Result.success(status);
+    }
 }

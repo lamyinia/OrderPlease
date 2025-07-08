@@ -27,4 +27,19 @@
         </where>
         order by set_meal.create_time desc
     </select>
+
+    <select id="filter" resultType="org.com.entity.SetMeal">
+        select * from set_meal
+        <where>
+            <if test="name != null">
+                and name like concat('%',name,'%')
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
 </mapper>

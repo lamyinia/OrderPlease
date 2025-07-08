@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.com.constant.StatusConstant;
 import org.com.dto.DishDTO;
 import org.com.dto.DishPageQueryDTO;
 import org.com.entity.Dish;
@@ -20,7 +21,7 @@ import java.util.Set;
 
 @Api(tags = "菜品相关接口")
 @Slf4j
-@RestController
+@RestController("adminDishController")
 @RequestMapping("/admin/dish")
 public class DishController {
     @Autowired
@@ -54,11 +55,11 @@ public class DishController {
 
     @GetMapping("/list")
     @ApiOperation("类型分页")
-    public Result<List<Dish>> selectByType(Long categoryId){
-        LambdaQueryWrapper<Dish> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(Dish::getCategoryId, categoryId);
+    public Result<List<DishVO>> selectByType(Long categoryId){
+        Dish condition = Dish.builder().categoryId(categoryId).status(StatusConstant.ENABLE).build();
+        List<DishVO> dishVOs = dishService.listWithFlavor(condition);
 
-        return Result.success(dishService.list(wrapper));
+        return Result.success(dishVOs);
     }
 
     @GetMapping("/{id}")

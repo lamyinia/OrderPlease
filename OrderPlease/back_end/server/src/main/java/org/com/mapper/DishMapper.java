@@ -8,9 +8,14 @@ import org.com.entity.Dish;
 import org.com.enumeration.OperationType;
 import org.com.vo.DishVO;
 
+import java.util.List;
+
 public interface DishMapper extends BaseMapper<Dish> {
     Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
     @AutoFillSetter(value = OperationType.INSERT)
     void insertDish(Dish dish);
+
+
+    List<Dish> filter(Dish dish);
 }

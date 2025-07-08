@@ -16,7 +16,7 @@ import java.util.List;
 
 @Api(tags = "菜品套餐分类相关接口")
 @Slf4j
-@RestController
+@RestController("adminCategoryController")
 @RequestMapping("/admin/category")
 public class CategoryController {
     @Autowired
@@ -27,7 +27,7 @@ public class CategoryController {
     @ApiOperation("类型分页")
     public Result<List<Category>> selectByType(Integer type){
         List<Category> list = categoryService.selectByType(type);
-        return null;
+        return Result.success(list);
     }
 
     @GetMapping("/page")

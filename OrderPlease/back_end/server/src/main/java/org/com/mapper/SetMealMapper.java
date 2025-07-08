@@ -8,9 +8,13 @@ import org.com.entity.SetMeal;
 import org.com.enumeration.OperationType;
 import org.com.vo.SetMealVO;
 
+import java.util.List;
+
 public interface SetMealMapper extends BaseMapper<SetMeal> {
     Page<SetMealVO> pageQuery(SetMealPageQueryDTO setMealPageQueryDTO);
 
     @AutoFillSetter(value = OperationType.INSERT)
     void addSetMeal(SetMeal setMeal);
+
+    List<SetMeal> filter(SetMeal build);
 }

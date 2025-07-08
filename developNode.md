@@ -1,4 +1,6 @@
-spring项目的重要配置：
+### 配置思路
+
+##### 后端项目初始配置：
 
 ​	1.配置拦截器
 
@@ -12,9 +14,25 @@ spring项目的重要配置：
 
 
 
-前端项目初始配置：
+##### 前端项目初始配置：
+
+
 
 ​	
 
-​	
+
+
+
+
+### 报错解决
+
+###### 配置 websocket 后无法进行单元测试
+
+添加 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) 的注解在 Test 类
+
+
+
+
+
+### 问题解答
 
