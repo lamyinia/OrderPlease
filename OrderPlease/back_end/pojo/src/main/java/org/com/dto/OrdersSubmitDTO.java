@@ -2,12 +2,14 @@ package org.com.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@ToString
 public class OrdersSubmitDTO implements Serializable {
     //地址簿id
     private Long addressBookId;
