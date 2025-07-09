@@ -1,16 +1,12 @@
 package org.com.controller.user;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.com.context.BaseContext;
+import org.com.dto.ShoppingCartDTO;
 import org.com.entity.ShoppingCart;
 import org.com.result.Result;
 import org.com.service.ShoppingCartService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -21,15 +17,31 @@ public class ShoppingCartController {
     @Autowired
     ShoppingCartService shoppingCartService;
 
-
     @PostMapping("/add")
-    public void addItem(){
+    public Result addItem(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        log.info("购物车商品添加操作");
+        shoppingCartService.addItem(shoppingCartDTO);
 
+        return Result.success();
+    }
+
+    @PostMapping("/sub")
+    public Result subitem(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        log.info("购物车商品减少操作");
+        shoppingCartService.subItem(shoppingCartDTO);
+
+        return Result.success();
     }
 
     @GetMapping("/list")
     public Result<List<ShoppingCart>> selectList(){
-        List<ShoppingCart> list = shoppingCartService.showAllItem();
+        List<ShoppingCart> list = shoppingCartService.showAllItems();
         return Result.success(list);
+    }
+
+    @DeleteMapping("/clean")
+    public Result cleanItems(){
+        shoppingCartService.cleanItems();
+        return Result.success();
     }
 }

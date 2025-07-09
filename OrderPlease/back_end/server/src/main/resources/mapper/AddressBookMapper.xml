@@ -3,4 +3,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.com.mapper.AddressBookMapper">
 
+    <select id="filter" resultType="org.com.entity.AddressBook">
+        select *
+        from address_book
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="phone != null">
+                and phone = #{phone}
+            </if>
+            <if test="isDefault != null">
+                and isDefault = #{isDefault}
+            </if>
+        </where>
+    </select>
 </mapper>

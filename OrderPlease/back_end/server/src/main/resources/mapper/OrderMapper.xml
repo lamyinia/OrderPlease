@@ -3,4 +3,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.com.mapper.OrderMapper">
 
+    <select id="selectSalesTop10" resultType="org.com.dto.GoodsSalesDTO">
+        select order_detail.name, sum(order_detail.number) as number
+        from order_detail, orders
+        where order_detail.order_id = orders.id and orders.status = 5
+        <if test="beginTime != null">
+            and orders.order_time >= #{beginTime}
+        </if>
+        <if test="endTime != null">
+            and #{endTime} >= orders.order_time
+        </if>
+        group by order_detail.name
+        order by number desc
+        limit 0, 10
+    </select>
 </mapper>
