@@ -9,6 +9,7 @@ import org.com.enumeration.OperationType;
 import org.com.vo.SetMealVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SetMealMapper extends BaseMapper<SetMeal> {
     Page<SetMealVO> pageQuery(SetMealPageQueryDTO setMealPageQueryDTO);
@@ -17,4 +18,6 @@ public interface SetMealMapper extends BaseMapper<SetMeal> {
     void addSetMeal(SetMeal setMeal);
 
     List<SetMeal> filter(SetMeal build);
+
+    Integer countByMap(Map<String, Object> map);
 }

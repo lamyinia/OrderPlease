@@ -9,6 +9,7 @@ import org.com.entity.Orders;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface OrderMapper extends BaseMapper<Orders> {
     List<GoodsSalesDTO> selectSalesTop10(LocalDateTime beginTime, LocalDateTime endTime);
@@ -20,4 +21,8 @@ public interface OrderMapper extends BaseMapper<Orders> {
 
     @Select("select count(id) from orders where status = #{status}")
     Integer countStatus(Integer status);
+
+    Double sumByMap(Map map);
+
+    Integer countByMap(Map<String, Object> map);
 }

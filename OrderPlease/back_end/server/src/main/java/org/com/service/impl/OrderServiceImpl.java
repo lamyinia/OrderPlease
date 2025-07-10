@@ -287,6 +287,21 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.updateById(metaOrder);
     }
 
+    @Override
+    public void reminder(Long id) {
+
+    }
+
+    @Override
+    public void userCancelById(Long id) {
+
+    }
+
+    @Override
+    public void repeat(Long id) {
+
+    }
+
     private List<OrderVO> getOrderVOList(Page<Orders> page) {
         List<OrderVO> orderVOList = new ArrayList<>();
 

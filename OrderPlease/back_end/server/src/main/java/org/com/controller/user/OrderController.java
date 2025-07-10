@@ -41,4 +41,22 @@ public class OrderController {
         PageResult pageResult = orderService.pageQueryOrder(page, pageSize, status);
         return Result.success(pageResult);
     }
+
+    @GetMapping("/reminder/{id}")
+    public Result reminder(@PathVariable("id") Long id){
+        orderService.reminder(id);
+        return Result.success();
+    }
+
+    @GetMapping("/cancel/{id}")
+    public Result cancel(@PathVariable("id") Long id){
+        orderService.userCancelById(id);
+        return Result.success();
+    }
+
+    @PostMapping("/repetition/{id}")
+    public Result repetition(@PathVariable("id") Long id){
+        orderService.repeat(id);
+        return Result.success();
+    }
 }

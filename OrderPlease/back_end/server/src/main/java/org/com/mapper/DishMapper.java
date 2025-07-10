@@ -9,6 +9,7 @@ import org.com.enumeration.OperationType;
 import org.com.vo.DishVO;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DishMapper extends BaseMapper<Dish> {
     Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
@@ -18,4 +19,6 @@ public interface DishMapper extends BaseMapper<Dish> {
 
 
     List<Dish> filter(Dish dish);
+
+    Integer countByMap(Map<String, Object> map);
 }
