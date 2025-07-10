@@ -1,11 +1,11 @@
 package org.com.controller.user;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.dto.ShoppingCartDTO;
 import org.com.entity.ShoppingCart;
 import org.com.result.Result;
 import org.com.service.ShoppingCartService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("user/shoppingCart")
+@RequiredArgsConstructor
 public class ShoppingCartController {
-    @Autowired
-    ShoppingCartService shoppingCartService;
+    private final ShoppingCartService shoppingCartService;
 
     @PostMapping("/add")
     public Result addItem(@RequestBody ShoppingCartDTO shoppingCartDTO){

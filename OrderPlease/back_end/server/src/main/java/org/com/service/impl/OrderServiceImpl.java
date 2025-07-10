@@ -6,11 +6,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.com.constant.MessageConstant;
 import org.com.context.BaseContext;
-import org.com.dto.OrdersPageQueryDTO;
-import org.com.dto.OrdersPaymentDTO;
-import org.com.dto.OrdersSubmitDTO;
+import org.com.dto.*;
 import org.com.entity.*;
 import org.com.exception.AddressBookBusinessException;
 import org.com.exception.OrderBusinessException;
@@ -19,6 +18,7 @@ import org.com.mapper.*;
 import org.com.result.PageResult;
 import org.com.service.OrderService;
 import org.com.vo.OrderPaymentVO;
+import org.com.vo.OrderStatisticsVO;
 import org.com.vo.OrderSubmitVO;
 import org.com.vo.OrderVO;
 import org.com.websocket.WebSocketServer;
@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -165,6 +166,11 @@ public class OrderServiceImpl implements OrderService {
         return new PageResult(page.getTotal(), list);
     }
 
+    /**
+     * @param ordersPageQueryDTO
+     * 管理人员订单查询，返回格式如：北冰洋*2;馒头*4;东坡肘子*1;清蒸鲈鱼*3;
+     * @return {@link PageResult }
+     */
     @Override
     public PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
         PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
@@ -173,6 +179,112 @@ public class OrderServiceImpl implements OrderService {
         List<OrderVO> orderVOList = getOrderVOList(page);
 
         return new PageResult(page.getTotal(), orderVOList);
+    }
+
+    @Override
+    public OrderVO details(Long id) {
+        Orders orders = orderMapper.selectById(id);
+
+        List<OrderDetail> orderDetails = orderDetailMapper.selectList(new LambdaQueryWrapper<OrderDetail>().eq(OrderDetail::getOrderId, orders.getId()));
+        OrderVO orderVO = new OrderVO();
+        BeanUtils.copyProperties(orders, orderVO);
+        orderVO.setOrderDetailList(orderDetails);
+
+        return orderVO;
+    }
+
+    @Override
+    public void confirm(OrdersConfirmDTO ordersConfirmDTO) {
+        Orders meta = Orders.builder()
+                .id(ordersConfirmDTO.getId())
+                .status(Orders.CONFIRMED)
+                .build();
+
+        orderMapper.updateById(meta);
+    }
+
+    @Override
+    public void delivery(Long id) {
+        Orders orders = orderMapper.selectById(id);
+
+        if (orders == null || !orders.getStatus().equals(Orders.CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        orders.setStatus(Orders.DELIVERY_IN_PROGRESS);
+        orders.setDeliveryTime(LocalDateTime.now());
+
+        orderMapper.updateById(orders);
+    }
+
+    @Override
+    public void complete(Long id) {
+        Orders orders = orderMapper.selectById(id);
+
+        if (orders == null || !orders.getStatus().equals(Orders.DELIVERY_IN_PROGRESS)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        orders.setStatus(Orders.COMPLETED);
+        orders.setDeliveryTime(LocalDateTime.now());
+
+        orderMapper.updateById(orders);
+    }
+
+    @Override
+    public void cancel(OrdersCancelDTO ordersCancelDTO) {
+        Orders orders = orderMapper.selectById(ordersCancelDTO.getId());
+
+        Integer payStatus = orders.getPayStatus();
+        if (payStatus == 1) {
+            // 用户已支付，需要退款 TODO
+            log.info("申请退款");
+        }
+
+        Orders metaOrder = Orders.builder().id(ordersCancelDTO.getId())
+                .status(Orders.CANCELLED)
+                .cancelReason(ordersCancelDTO.getCancelReason())
+                .cancelTime(LocalDateTime.now())
+                .build();
+
+        orderMapper.updateById(metaOrder);
+    }
+
+    @Override
+    public OrderStatisticsVO statistics() {
+        Integer toBeConfirmed = orderMapper.countStatus(Orders.TO_BE_CONFIRMED);
+        Integer confirmed = orderMapper.countStatus(Orders.CONFIRMED);
+        Integer deliveryInProgress = orderMapper.countStatus(Orders.DELIVERY_IN_PROGRESS);
+
+        OrderStatisticsVO VO = OrderStatisticsVO.builder().toBeConfirmed(toBeConfirmed)
+                .confirmed(confirmed)
+                .deliveryInProgress(deliveryInProgress)
+                .build();
+
+        return VO;
+    }
+
+    @Override
+    public void reject(OrdersRejectionDTO ordersRejectionDTO) {
+        Orders orders = orderMapper.selectById(ordersRejectionDTO.getId());
+
+        if (orders == null || !orders.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Integer payStatus = orders.getPayStatus();
+        if (payStatus == Orders.PAID) {
+            // 用户已支付，需要退款 TODO
+            log.info("reject: 申请退款");
+        }
+
+        Orders metaOrder = Orders.builder().id(ordersRejectionDTO.getId())
+                .status(Orders.CANCELLED)
+                .rejectionReason(ordersRejectionDTO.getRejectionReason())
+                .cancelTime(LocalDateTime.now())
+                .build();
+
+        orderMapper.updateById(metaOrder);
     }
 
     private List<OrderVO> getOrderVOList(Page<Orders> page) {

@@ -1,6 +1,7 @@
 package org.com.controller.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import lombok.RequiredArgsConstructor;
 import org.com.context.BaseContext;
 import org.com.entity.AddressBook;
 import org.com.result.Result;
@@ -12,9 +13,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/user/addressBook")
+@RequiredArgsConstructor
 public class AddressBookController {
-    @Autowired
-    AddressBookService addressBookService;
+    private final AddressBookService addressBookService;
 
     @PostMapping
     public Result addAddress(@RequestBody AddressBook addressBook){

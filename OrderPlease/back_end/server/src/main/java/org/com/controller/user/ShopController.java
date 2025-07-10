@@ -1,5 +1,6 @@
 package org.com.controller.user;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.result.Result;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController("userShopController")
 @RequestMapping("/user/shop")
+@RequiredArgsConstructor
 public class ShopController {
-    @Autowired
-    RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
 
     public static final String KEY = "SHOP_STATUS";
 

@@ -1,6 +1,7 @@
 package org.com.controller.user;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import org.com.entity.Category;
 import org.com.result.Result;
 import org.com.service.CategoryService;
@@ -13,9 +14,9 @@ import java.util.List;
 
 @RestController("userCategoryController")
 @RequestMapping("/user/category")
+@RequiredArgsConstructor
 public class CategoryController {
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping("/list")
     @ApiOperation("类型分页")

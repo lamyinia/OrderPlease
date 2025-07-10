@@ -2,6 +2,7 @@ package org.com.controller.admin;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.dto.SetMealDTO;
 import org.com.dto.SetMealPageQueryDTO;
@@ -15,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController("adminSetMealController")
 @RequestMapping("/admin/setmeal")
+@RequiredArgsConstructor
 public class SetMealController {
-    @Autowired
-    SetMealService setMealService;
+    private final SetMealService setMealService;
 
     @PostMapping
     @ApiOperation("新增套餐")

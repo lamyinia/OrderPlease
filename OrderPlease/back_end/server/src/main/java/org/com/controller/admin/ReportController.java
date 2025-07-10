@@ -1,5 +1,6 @@
 package org.com.controller.admin;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.result.Result;
 import org.com.service.ReportService;
@@ -15,9 +16,9 @@ import java.time.LocalDate;
 @Slf4j
 @RestController
 @RequestMapping("/admin/report")
+@RequiredArgsConstructor
 public class ReportController {
-    @Autowired
-    ReportService reportService;
+    private final ReportService reportService;
 
     @GetMapping("/top10")
     public Result<SalesTop10ReportVO> selectSalesTop10(
@@ -25,6 +26,8 @@ public class ReportController {
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end
             ){
         log.info("销量前10的商品在 {} 到 {} 期间", begin, end);
+
+        end = null;
 
         return Result.success(reportService.selectSalesTop10(begin, end));
     }

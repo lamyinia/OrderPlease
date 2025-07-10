@@ -2,6 +2,7 @@ package org.com.controller.admin;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.constant.JwtClaimsConstant;
 import org.com.dto.EmployeeDTO;
@@ -25,11 +26,10 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/admin/employee")
+@RequiredArgsConstructor
 public class EmployeeController {
-    @Autowired
-    private EmployeeService employeeService;
-    @Autowired
-    private JwtProperties jwtProperties;
+    private final EmployeeService employeeService;
+    private final JwtProperties jwtProperties;
 
     /**
      * @param employeeLoginDTO

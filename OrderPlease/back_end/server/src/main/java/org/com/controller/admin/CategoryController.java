@@ -2,6 +2,7 @@ package org.com.controller.admin;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.dto.CategoryDTO;
 import org.com.dto.CategoryPageQueryDTO;
@@ -18,9 +19,9 @@ import java.util.List;
 @Slf4j
 @RestController("adminCategoryController")
 @RequestMapping("/admin/category")
+@RequiredArgsConstructor
 public class CategoryController {
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     // TODO
     @GetMapping("/list")

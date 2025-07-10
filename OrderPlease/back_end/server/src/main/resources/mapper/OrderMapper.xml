@@ -8,15 +8,16 @@
         from order_detail, orders
         where order_detail.order_id = orders.id and orders.status = 5
         <if test="beginTime != null">
-            and orders.order_time >= #{beginTime}
+            and orders.order_time > #{beginTime}
         </if>
         <if test="endTime != null">
-            and #{endTime} >= orders.order_time
+            and #{endTime} > orders.order_time
         </if>
         group by order_detail.name
         order by number desc
         limit 0, 10
     </select>
+
     <select id="pageQuery" resultType="org.com.entity.Orders">
         select * from orders
         <where>

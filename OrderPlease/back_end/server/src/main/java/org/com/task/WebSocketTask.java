@@ -13,7 +13,7 @@ public class WebSocketTask {
     @Autowired
     WebSocketServer webSocketServer;
 
-//    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0/20 * * * * ?")
     public void sendMessageToClient() {
         webSocketServer.sendToAllClient("这是来自服务端的消息：" + DateTimeFormatter.ofPattern("HH:mm:ss").format(LocalDateTime.now()));
     }

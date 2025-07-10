@@ -2,6 +2,7 @@ package org.com.controller.user;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.constant.JwtClaimsConstant;
 import org.com.dto.UserLoginDTO;
@@ -11,7 +12,6 @@ import org.com.result.Result;
 import org.com.service.UserService;
 import org.com.utils.JwtUtil;
 import org.com.vo.UserLoginVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +24,10 @@ import java.util.Map;
 @Api(tags = "客户管理相关")
 @RestController
 @RequestMapping("/user/user")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    UserService userService;
-    @Autowired
-    JwtProperties jwtProperties;
+    private final UserService userService;
+    private final JwtProperties jwtProperties;
 
     @ApiOperation("客户登录")
     @PostMapping("/login")

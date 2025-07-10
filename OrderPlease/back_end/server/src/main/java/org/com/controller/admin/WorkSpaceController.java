@@ -1,5 +1,6 @@
 package org.com.controller.admin;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.result.Result;
 import org.com.service.WorkSpaceService;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/admin/workspace")
+@RequiredArgsConstructor
 public class WorkSpaceController {
-    @Autowired
-    WorkSpaceService workSpaceService;
+    private final WorkSpaceService workSpaceService;
 
     @GetMapping("/overviewOrders")
     public Result<OrderOverViewVO> overViewOrders(){

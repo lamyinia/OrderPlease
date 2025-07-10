@@ -1,6 +1,7 @@
 package org.com.controller.admin;
 
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.constant.MessageConstant;
 import org.com.result.Result;
@@ -18,9 +19,9 @@ import java.util.UUID;
 @Slf4j
 @RestController
 @RequestMapping("/admin/common")
+@RequiredArgsConstructor
 public class CommonController {
-    @Autowired
-    AliYunOssUtil aliYunOssUtil;
+    private final AliYunOssUtil aliYunOssUtil;
 
     @PostMapping("/upload")
     public Result<String> upload(MultipartFile file){

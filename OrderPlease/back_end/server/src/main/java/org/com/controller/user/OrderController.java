@@ -1,5 +1,6 @@
 package org.com.controller.user;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.dto.OrdersPaymentDTO;
 import org.com.dto.OrdersSubmitDTO;
@@ -14,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController("userOrderController")
 @RequestMapping("/user/order")
+@RequiredArgsConstructor
 public class OrderController {
-    @Autowired
-    private OrderService orderService;
+    private final OrderService orderService;
 
     @PostMapping("/submit")
     public Result<OrderSubmitVO> submit(@RequestBody OrdersSubmitDTO ordersSubmitDTO){

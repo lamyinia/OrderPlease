@@ -3,6 +3,7 @@ package org.com.controller.admin;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.constant.StatusConstant;
 import org.com.dto.DishDTO;
@@ -23,11 +24,10 @@ import java.util.Set;
 @Slf4j
 @RestController("adminDishController")
 @RequestMapping("/admin/dish")
+@RequiredArgsConstructor
 public class DishController {
-    @Autowired
-    private DishService dishService;
-    @Autowired
-    private RedisTemplate redisTemplate;
+    private final DishService dishService;
+    private final RedisTemplate redisTemplate;
 
     @GetMapping("/page")
     @ApiOperation("普通分页")

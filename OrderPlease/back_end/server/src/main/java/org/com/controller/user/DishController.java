@@ -1,6 +1,7 @@
 package org.com.controller.user;
 
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.com.constant.StatusConstant;
 import org.com.entity.Dish;
@@ -17,9 +18,9 @@ import java.util.List;
 @Slf4j
 @RestController("userDishController")
 @RequestMapping("/user/dish")
+@RequiredArgsConstructor
 public class DishController {
-    @Autowired
-    private DishService dishService;
+    private final DishService dishService;
 
     @ApiOperation("查询某个分类的菜品")
     @GetMapping("/list")

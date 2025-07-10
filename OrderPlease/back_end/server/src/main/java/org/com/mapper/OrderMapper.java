@@ -17,4 +17,7 @@ public interface OrderMapper extends BaseMapper<Orders> {
     Orders getByNumberAndUserId(String orderNumber, Long userId);
 
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
+
+    @Select("select count(id) from orders where status = #{status}")
+    Integer countStatus(Integer status);
 }

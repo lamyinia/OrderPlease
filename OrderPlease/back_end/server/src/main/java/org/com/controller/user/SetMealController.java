@@ -1,5 +1,6 @@
 package org.com.controller.user;
 
+import lombok.RequiredArgsConstructor;
 import org.com.constant.StatusConstant;
 import org.com.entity.SetMeal;
 import org.com.result.Result;
@@ -13,9 +14,9 @@ import java.util.List;
 
 @RestController("userSetMealController")
 @RequestMapping("/user/setmeal")
+@RequiredArgsConstructor
 public class SetMealController {
-    @Autowired
-    SetMealService setMealService;
+    private final SetMealService setMealService;
 
     @GetMapping("/list")
     Result<List<SetMeal>> selectList(Long categoryId){

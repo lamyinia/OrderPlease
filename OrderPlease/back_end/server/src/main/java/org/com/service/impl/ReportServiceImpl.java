@@ -24,8 +24,13 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public SalesTop10ReportVO selectSalesTop10(LocalDate begin, LocalDate end) {
-        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
-        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+        LocalDateTime beginTime = null, endTime = null;
+        if (begin != null){
+            beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        }
+        if (end != null){
+            endTime = LocalDateTime.of(end, LocalTime.MAX);
+        }
 
         List<GoodsSalesDTO> salesTop10 = orderMapper.selectSalesTop10(beginTime, endTime);
 
