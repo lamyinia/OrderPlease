@@ -1,41 +1,49 @@
 package org.com.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import lombok.RequiredArgsConstructor;
 import org.com.constant.MessageConstant;
 import org.com.context.BaseContext;
+import org.com.dto.OrdersPageQueryDTO;
+import org.com.dto.OrdersPaymentDTO;
 import org.com.dto.OrdersSubmitDTO;
-import org.com.entity.AddressBook;
-import org.com.entity.OrderDetail;
-import org.com.entity.Orders;
-import org.com.entity.ShoppingCart;
+import org.com.entity.*;
 import org.com.exception.AddressBookBusinessException;
+import org.com.exception.OrderBusinessException;
 import org.com.exception.ShoppingCarBusinessException;
-import org.com.mapper.AddressBookMapper;
-import org.com.mapper.OrderDetailMapper;
-import org.com.mapper.OrderMapper;
-import org.com.mapper.ShoppingCartMapper;
-import org.com.service.AddressBookService;
+import org.com.mapper.*;
+import org.com.result.PageResult;
 import org.com.service.OrderService;
+import org.com.vo.OrderPaymentVO;
 import org.com.vo.OrderSubmitVO;
+import org.com.vo.OrderVO;
+import org.com.websocket.WebSocketServer;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private AddressBookMapper addressBookMapper;
-    @Autowired
-    private OrderMapper orderMapper;
-    @Autowired
-    private OrderDetailMapper orderDetailMapper;
-    @Autowired
-    private ShoppingCartMapper shoppingCartMapper;
+    private final AddressBookMapper addressBookMapper;
+    private final OrderMapper orderMapper;
+    private final OrderDetailMapper orderDetailMapper;
+    private final ShoppingCartMapper shoppingCartMapper;
+    private final UserMapper userMapper;
+    private final WebSocketServer webSocketServer;
 
     @Override
     @Transactional
@@ -84,5 +92,112 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         return result;
+    }
+
+    @Override
+    public OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) {
+        Long userId = BaseContext.getCurrentId();
+        User user = userMapper.selectById(userId);
+
+        JSONObject jsonObject = new JSONObject();
+
+        if (jsonObject.getString("code") != null && jsonObject.getString("code").equals("ORDERPAID")) {
+            throw new OrderBusinessException("该订单已支付");
+        }
+
+        OrderPaymentVO vo = jsonObject.toJavaObject(OrderPaymentVO.class);
+        vo.setPackageStr(jsonObject.getString("package"));
+
+        return vo;
+    }
+
+    @Override
+    public void paySuccess(String orderNumber) {
+        Long userId = BaseContext.getCurrentId();
+
+        Orders userOrder = orderMapper.getByNumberAndUserId(orderNumber, userId);
+
+        Orders metaOrder = Orders.builder()
+                .id(userOrder.getId())
+                .status(Orders.TO_BE_CONFIRMED)
+                .payStatus(Orders.PAID)
+                .checkoutTime(LocalDateTime.now())
+                .build();
+
+        orderMapper.updateById(metaOrder);
+
+        Map map = new HashMap();
+        map.put("type",1); // 1表示来单提醒 2表示客户催单
+        map.put("orderId",userOrder.getId());
+        map.put("content","订单号：" + orderNumber);
+
+        String json = JSON.toJSONString(map);
+
+        webSocketServer.sendToAllClient(json);
+    }
+
+    @Override
+    public PageResult pageQueryOrder(int pageNum, int pageSize, Integer status) {
+        PageHelper.startPage(pageNum, pageSize);
+
+        OrdersPageQueryDTO ordersPageQueryDTO = new OrdersPageQueryDTO();
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+        ordersPageQueryDTO.setStatus(status);
+
+        Page<Orders> page = orderMapper.pageQuery(ordersPageQueryDTO);
+
+        List<OrderVO> list = new ArrayList();
+
+        if (page != null && page.getTotal() > 0) {
+            for (Orders orders : page) {
+                Long orderId = orders.getId();
+
+                List<OrderDetail> orderDetails = orderDetailMapper.selectList(new LambdaQueryWrapper<OrderDetail>().eq(OrderDetail::getOrderId, orderId));
+
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(orders, orderVO);
+                orderVO.setOrderDetailList(orderDetails);
+
+                list.add(orderVO);
+            }
+        }
+
+        return new PageResult(page.getTotal(), list);
+    }
+
+    @Override
+    public PageResult conditionSearch(OrdersPageQueryDTO ordersPageQueryDTO) {
+        PageHelper.startPage(ordersPageQueryDTO.getPage(), ordersPageQueryDTO.getPageSize());
+        Page<Orders> page = orderMapper.pageQuery(ordersPageQueryDTO);
+
+        List<OrderVO> orderVOList = getOrderVOList(page);
+
+        return new PageResult(page.getTotal(), orderVOList);
+    }
+
+    private List<OrderVO> getOrderVOList(Page<Orders> page) {
+        List<OrderVO> orderVOList = new ArrayList<>();
+
+        List<Orders> ordersList = page.getResult();
+        if (!CollectionUtils.isEmpty(ordersList)) {
+            for (Orders orders : ordersList) {
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(orders, orderVO);
+                String orderDishes = getOrderDishesStr(orders);
+
+                orderVO.setOrderDishes(orderDishes);
+                orderVOList.add(orderVO);
+            }
+        }
+
+        return orderVOList;
+
+    }
+    private String getOrderDishesStr(Orders orders) {
+        List<OrderDetail> orderDetailList = orderDetailMapper.selectList(new LambdaQueryWrapper<OrderDetail>().eq(OrderDetail::getOrderId, orders.getId()));
+
+        List<String> orderDishList = orderDetailList.stream().map(x -> String.format("%s*%d;", x.getName(), x.getNumber())).collect(Collectors.toList());
+
+        return String.join("", orderDishList);
     }
 }
