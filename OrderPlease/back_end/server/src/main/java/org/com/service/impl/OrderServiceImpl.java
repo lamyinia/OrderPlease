@@ -289,17 +289,60 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void reminder(Long id) {
+        Orders orders = orderMapper.selectById(id);
+        if (orders == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
 
+        Map<String, Object> map = new HashMap<>();
+        map.put("type", 2); // 1 表示来单提醒 2 表示客户催单
+        map.put("orderId", id);
+        map.put("content", "订单号: " + orders.getNumber());
+
+        webSocketServer.sendToAllClient(JSON.toJSONString(map));
     }
 
     @Override
     public void userCancelById(Long id) {
+        Orders orders = orderMapper.selectById(id);
+        if (orders == null) {
+            throw new OrderBusinessException(MessageConstant.ORDER_NOT_FOUND);
+        }
+        if (orders.getStatus() > 2) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
 
+        Orders metaOrder = new Orders();
+        orders.setId(orders.getId());
+
+        if (orders.getStatus().equals(Orders.TO_BE_CONFIRMED)) {
+            //  TODO 微信退款
+            //  支付状态修改为 退款
+            orders.setPayStatus(Orders.REFUND);
+        }
+
+        orders.setStatus(Orders.CANCELLED);
+        orders.setCancelReason("用户取消");
+        orders.setCancelTime(LocalDateTime.now());
+
+        orderMapper.updateById(orders);
     }
 
     @Override
     public void repeat(Long id) {
+        Long userId = BaseContext.getCurrentId();
 
+        List<OrderDetail> orderDetailList = orderDetailMapper.selectList(new LambdaQueryWrapper<OrderDetail>().eq(OrderDetail::getOrderId, id));
+
+        List<ShoppingCart> items = orderDetailList.stream().map(item -> {
+            ShoppingCart shoppingCart = new ShoppingCart();
+            BeanUtils.copyProperties(item, shoppingCart, "id");
+
+            shoppingCart.setUserId(userId);
+            return shoppingCart;
+        }).collect(Collectors.toList());
+
+        shoppingCartMapper.insert(items);
     }
 
     private List<OrderVO> getOrderVOList(Page<Orders> page) {

@@ -9,7 +9,7 @@ import org.com.result.Result;
 import org.com.service.OrderService;
 import org.com.vo.OrderPaymentVO;
 import org.com.vo.OrderSubmitVO;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.com.vo.OrderVO;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -58,5 +58,11 @@ public class OrderController {
     public Result repetition(@PathVariable("id") Long id){
         orderService.repeat(id);
         return Result.success();
+    }
+
+    @GetMapping("/orderDetail/{id}")
+    public Result<OrderVO> details(@PathVariable("id") Long id) {
+        OrderVO orderVO = orderService.details(id);
+        return Result.success(orderVO);
     }
 }
